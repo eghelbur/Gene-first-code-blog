@@ -1,0 +1,112 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+  {% include "header.html" %}
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('{{ url_for('static', filename='img/edit-bg.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            {% if is_edit: %}
+            <h1>Edit Post</h1>
+            {% else: %}
+            <h1>New Post</h1>
+            {% endif %}
+            <span class="subheading">You're going to make a great blog post!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+
+        <form method="POST">
+          {{ form.hidden_tag() }}
+
+          <div class="form-group">
+            {{ form.title.label(class="form-control-label") }}
+            {{ form.title(class="form-control") }}
+            {% if form.title.errors %}
+              <ul class="errors">
+                {% for error in form.title.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            {{ form.subtitle.label(class="form-control-label") }}
+            {{ form.subtitle(class="form-control") }}
+            {% if form.subtitle.errors %}
+              <ul class="errors">
+                {% for error in form.subtitle.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            {{ form.img_url.label(class="form-control-label") }}
+            {{ form.img_url(class="form-control") }}
+            {% if form.img_url.errors %}
+              <ul class="errors">
+                {% for error in form.img_url.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+
+          {% if is_edit %}
+            {# Display author's name for edit-post #}
+            <div class="form-group">
+              <label class="form-control-label">Author</label>
+              <p>{{ post.author.username }}</p>
+            </div>
+          {% else %}
+            {# Add the 'author' field for new-post #}
+            <div class="form-group">
+              {{ form.author.label(class="form-control-label") }}
+              {{ form.author(class="form-control") }}
+              {% if form.author.errors %}
+                <ul class="errors">
+                  {% for error in form.author.errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            {{ form.body.label(class="form-control-label") }}
+            {{ form.body(class="form-control") }}
+            {% if form.body.errors %}
+              <ul class="errors">
+                {% for error in form.body.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+{% endblock %}
